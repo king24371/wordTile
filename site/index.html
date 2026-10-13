@@ -82,10 +82,10 @@ Source SHA-256: 38f4c5f927f746b3dfa4c3a5d7edf0b7a3e828e27438418fa54f9e1565289412
 <title>Word Tiles｜英文麻將</title>
 <link rel="icon" type="image/png" href="./share/7b955fea90dd9df512f350f4eb3ed40d3a9cb909d2b953a6d293598928b94951.png">
 <link rel="apple-touch-icon" href="./share/7b955fea90dd9df512f350f4eb3ed40d3a9cb909d2b953a6d293598928b94951.png">
-<meta name="description" content="單機英文拼字麻將：摸牌、吃牌，以 14 張牌拼成字典確認的英文單字或單字加一對。">
+<meta name="description" content="單機英文拼字麻將：自由排列手牌、吃牌與打牌；胡牌時以逗號列出單字並交由外部字典驗證，和牌後揭示全員手牌。">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Word Tiles｜英文麻將">
-<meta property="og:description" content="單機英文拼字麻將：摸牌、吃牌，以 14 張牌拼成字典確認的英文單字或單字加一對。">
+<meta property="og:description" content="單機英文拼字麻將：自由排列手牌、吃牌與打牌；胡牌時以逗號列出單字並交由外部字典驗證，和牌後揭示全員手牌。">
 <meta property="og:url" content="https://wordtiles-hqvybl4y.manus.game/">
 <meta property="og:image" content="https://wordtiles-hqvybl4y.manus.game/share/4570dd921bab6eb7012c92720ce30eb0daaf1523334ed265268e447a90aeb801.png">
 <meta property="og:image:width" content="2560">
@@ -94,7 +94,7 @@ Source SHA-256: 38f4c5f927f746b3dfa4c3a5d7edf0b7a3e828e27438418fa54f9e1565289412
 <meta property="og:image:alt" content="Word Tiles｜英文麻將">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Word Tiles｜英文麻將">
-<meta name="twitter:description" content="單機英文拼字麻將：摸牌、吃牌，以 14 張牌拼成字典確認的英文單字或單字加一對。">
+<meta name="twitter:description" content="單機英文拼字麻將：自由排列手牌、吃牌與打牌；胡牌時以逗號列出單字並交由外部字典驗證，和牌後揭示全員手牌。">
 <meta name="twitter:image" content="https://wordtiles-hqvybl4y.manus.game/share/4570dd921bab6eb7012c92720ce30eb0daaf1523334ed265268e447a90aeb801.png">
 <meta name="twitter:image:alt" content="Word Tiles｜英文麻將">
 <!-- manus:game-sharing:end -->
@@ -109,10 +109,21 @@ Source SHA-256: 38f4c5f927f746b3dfa4c3a5d7edf0b7a3e828e27438418fa54f9e1565289412
     <button id="loading-retry" type="button" hidden>Retry</button>
     <noscript>JavaScript is required to play this game.</noscript>
   </section>
-  <script>(function(){var R={"index.wasm":"/manus-storage/game/sha256/fc74679e3b97f76878947fcd4fbe1268cbfa6188182a2e33bbc3f5dc9bfa57d0.wasm","index.pck":"/manus-storage/game/sha256/1aec299f770cc6445f8f9bc187652292dbe0e331f9347a470f014448e8cee54c.pck"};var f=window.fetch.bind(window);window.fetch=function(i,o){var u=typeof i==="string"?i:(i&&i.url)||"";var b=u.split("?")[0].split("/").pop();return R[b]?f(R[b],o):f(i,o)};})();</script>
+  <script>(function(){var R={"index.wasm":"/manus-storage/game/sha256/fc74679e3b97f76878947fcd4fbe1268cbfa6188182a2e33bbc3f5dc9bfa57d0.wasm","index.pck":"/manus-storage/game/sha256/efda4fa9511ed972478d824e4ba4fa6ce5ca29bba2b329095c51937185db8c8b.pck"};var f=window.fetch.bind(window);window.fetch=function(i,o){var u=typeof i==="string"?i:(i&&i.url)||"";var b=u.split("?")[0].split("/").pop();return R[b]?f(R[b],o):f(i,o)};})();</script>
 <script>
     (() => {
-      const config = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":12172472,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
+      // Android WebView advertises Version/4.0 for compatibility even when its Chromium engine is current.
+      // Emscripten can mistake that token for Safari 4.0 and reject a supported modern WebView.
+      const originalUserAgent = navigator.userAgent || '';
+      if (/Android/i.test(originalUserAgent) && /Chrome\/\d+/i.test(originalUserAgent) && /Version\/4\.0\b/i.test(originalUserAgent)) {
+        const compatibleUserAgent = originalUserAgent.replace(/Version\/4\.0\b/i, 'Version/15.2.0');
+        try {
+          Object.defineProperty(navigator, 'userAgent', { configurable: true, get: () => compatibleUserAgent });
+        } catch (_) {
+          // Keep the original browser identity if the WebView does not allow an own-property override.
+        }
+      }
+      const config = {"args":[],"canvasResizePolicy":2,"emscriptenPoolSize":8,"ensureCrossOriginIsolationHeaders":true,"executable":"index","experimentalVK":false,"fileSizes":{"index.pck":12176124,"index.wasm":39514754},"focusCanvas":true,"gdextensionLibs":[],"godotPoolSize":4};
       const threads = false;
       const canvas = document.getElementById('canvas');
       const loading = document.getElementById('loading');
@@ -139,8 +150,8 @@ Source SHA-256: 38f4c5f927f746b3dfa4c3a5d7edf0b7a3e828e27438418fa54f9e1565289412
         notice.hidden = false;
         retry.hidden = false;
         const message = performance.now() - lastProgressAt >= 30000
-          ? (zh ? '暂未看到新的加载进度。可以继续等待，或重试。' : 'No recent loading progress. You can keep waiting or retry.')
-          : (zh ? '仍在加载。可以继续等待，或重试。' : 'Still loading. You can keep waiting or retry.');
+          ? (zh ? '暫未看到新的載入進度。可以繼續等待，或重試。' : 'No recent loading progress. You can keep waiting or retry.')
+          : (zh ? '仍在載入。可以繼續等待，或重試。' : 'Still loading. You can keep waiting or retry.');
         if (notice.textContent !== message) notice.textContent = message;
       };
       const onWindowError = (event) => fail(event.error || new Error('Engine startup error'));
@@ -158,7 +169,7 @@ Source SHA-256: 38f4c5f927f746b3dfa4c3a5d7edf0b7a3e828e27438418fa54f9e1565289412
         stopObserving();
         console.error('[game-loading] Startup failed', error);
         loading.hidden = false;
-        status.textContent = zh ? '游戏加载失败，请重试。' : 'Unable to load the game. Please retry.';
+        status.textContent = zh ? '遊戲載入失敗，請重試。' : 'Unable to load the game. Please retry.';
         progress.hidden = true;
         notice.hidden = true;
         retry.hidden = false;
@@ -180,13 +191,13 @@ Source SHA-256: 38f4c5f927f746b3dfa4c3a5d7edf0b7a3e828e27438418fa54f9e1565289412
         updateNotice();
         if (!Number.isFinite(total) || total <= 0 || !Number.isFinite(current) || current < 0) {
           progress.removeAttribute('value');
-          status.textContent = zh ? '正在加载…' : 'Loading…';
+          status.textContent = zh ? '正在載入…' : 'Loading…';
           return;
         }
         progress.max = total;
         progress.value = Math.min(current, total);
         status.textContent = current >= total
-          ? (zh ? '正在启动游戏…' : 'Starting game…')
+          ? (zh ? '正在啟動遊戲…' : 'Starting game…')
           : `${Math.floor(current / total * 100)}%`;
       };
       const start = async () => {

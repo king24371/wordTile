@@ -89,6 +89,17 @@ Source SHA-256: 38f4c5f927f746b3dfa4c3a5d7edf0b7a3e828e27438418fa54f9e1565289412
   </section>
   <script>
     (() => {
+      // Android WebView advertises Version/4.0 for compatibility even when its Chromium engine is current.
+      // Emscripten can mistake that token for Safari 4.0 and reject a supported modern WebView.
+      const originalUserAgent = navigator.userAgent || '';
+      if (/Android/i.test(originalUserAgent) && /Chrome\/\d+/i.test(originalUserAgent) && /Version\/4\.0\b/i.test(originalUserAgent)) {
+        const compatibleUserAgent = originalUserAgent.replace(/Version\/4\.0\b/i, 'Version/15.2.0');
+        try {
+          Object.defineProperty(navigator, 'userAgent', { configurable: true, get: () => compatibleUserAgent });
+        } catch (_) {
+          // Keep the original browser identity if the WebView does not allow an own-property override.
+        }
+      }
       const config = $GODOT_CONFIG;
       const threads = $GODOT_THREADS_ENABLED;
       const canvas = document.getElementById('canvas');
@@ -116,8 +127,8 @@ Source SHA-256: 38f4c5f927f746b3dfa4c3a5d7edf0b7a3e828e27438418fa54f9e1565289412
         notice.hidden = false;
         retry.hidden = false;
         const message = performance.now() - lastProgressAt >= 30000
-          ? (zh ? '暂未看到新的加载进度。可以继续等待，或重试。' : 'No recent loading progress. You can keep waiting or retry.')
-          : (zh ? '仍在加载。可以继续等待，或重试。' : 'Still loading. You can keep waiting or retry.');
+          ? (zh ? '暫未看到新的載入進度。可以繼續等待，或重試。' : 'No recent loading progress. You can keep waiting or retry.')
+          : (zh ? '仍在載入。可以繼續等待，或重試。' : 'Still loading. You can keep waiting or retry.');
         if (notice.textContent !== message) notice.textContent = message;
       };
       const onWindowError = (event) => fail(event.error || new Error('Engine startup error'));
@@ -135,7 +146,7 @@ Source SHA-256: 38f4c5f927f746b3dfa4c3a5d7edf0b7a3e828e27438418fa54f9e1565289412
         stopObserving();
         console.error('[game-loading] Startup failed', error);
         loading.hidden = false;
-        status.textContent = zh ? '游戏加载失败，请重试。' : 'Unable to load the game. Please retry.';
+        status.textContent = zh ? '遊戲載入失敗，請重試。' : 'Unable to load the game. Please retry.';
         progress.hidden = true;
         notice.hidden = true;
         retry.hidden = false;
@@ -157,13 +168,13 @@ Source SHA-256: 38f4c5f927f746b3dfa4c3a5d7edf0b7a3e828e27438418fa54f9e1565289412
         updateNotice();
         if (!Number.isFinite(total) || total <= 0 || !Number.isFinite(current) || current < 0) {
           progress.removeAttribute('value');
-          status.textContent = zh ? '正在加载…' : 'Loading…';
+          status.textContent = zh ? '正在載入…' : 'Loading…';
           return;
         }
         progress.max = total;
         progress.value = Math.min(current, total);
         status.textContent = current >= total
-          ? (zh ? '正在启动游戏…' : 'Starting game…')
+          ? (zh ? '正在啟動遊戲…' : 'Starting game…')
           : `${Math.floor(current / total * 100)}%`;
       };
       const start = async () => {
