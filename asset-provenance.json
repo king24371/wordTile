@@ -1,0 +1,681 @@
+{
+  "assets": {
+    "assets/share/favicon-256.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "unknown",
+      "referenceEvidence": [
+        "game-sharing.json",
+        "project.godot",
+        "scripts/main.gd"
+      ],
+      "regions": [],
+      "sha256": "sha256:7b955fea90dd9df512f350f4eb3ed40d3a9cb909d2b953a6d293598928b94951",
+      "shipped": true,
+      "size": 117837,
+      "source": {},
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [
+        "game-sharing.json",
+        "project.godot",
+        "scripts/main.gd"
+      ],
+      "used": true,
+      "usedBy": []
+    },
+    "assets/share/favicon.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "unknown",
+      "referenceEvidence": [],
+      "regions": [],
+      "sha256": "sha256:f4d8e24457efd5ab6803a6b18c7e80c960ffb9f8a8b6af0cfd9979f516087af1",
+      "shipped": true,
+      "size": 5012228,
+      "source": {},
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [],
+      "used": false,
+      "usedBy": []
+    },
+    "assets/share/og.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "unknown",
+      "referenceEvidence": [
+        "game-sharing.json"
+      ],
+      "regions": [],
+      "sha256": "sha256:4570dd921bab6eb7012c92720ce30eb0daaf1523334ed265268e447a90aeb801",
+      "shipped": true,
+      "size": 5683589,
+      "source": {},
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [
+        "game-sharing.json"
+      ],
+      "used": true,
+      "usedBy": []
+    },
+    "assets/template/characters/runner.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "template",
+      "referenceEvidence": [],
+      "regions": [],
+      "sha256": "sha256:c88485773d6ff9361e036f37d8ac76fb77b8c3f7c041c3f52c8dd222adc8cc21",
+      "shipped": true,
+      "size": 68885,
+      "source": {
+        "starterId": "game-generic-v56"
+      },
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [],
+      "used": false,
+      "usedBy": []
+    },
+    "assets/template/characters/sentinel.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "template",
+      "referenceEvidence": [],
+      "regions": [],
+      "sha256": "sha256:0d9fb751bca5507ba14f7090573e6605a94753390a9e7c53bf2f590f0a24918d",
+      "shipped": true,
+      "size": 64998,
+      "source": {
+        "starterId": "game-generic-v56"
+      },
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [],
+      "used": false,
+      "usedBy": []
+    },
+    "assets/template/environment/backdrop.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "template",
+      "referenceEvidence": [],
+      "regions": [],
+      "sha256": "sha256:ec4ab7867e60fb483dd438459f587b478aac4c1e71ec4fe509ce74a18de34216",
+      "shipped": true,
+      "size": 971282,
+      "source": {
+        "starterId": "game-generic-v56"
+      },
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [],
+      "used": false,
+      "usedBy": []
+    },
+    "assets/template/environment/foreground.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "template",
+      "referenceEvidence": [],
+      "regions": [],
+      "sha256": "sha256:4b6916024c69961fbfa7cdc929c68f547fea4561e61ebdb3405b3aba0efbd94d",
+      "shipped": true,
+      "size": 58603,
+      "source": {
+        "starterId": "game-generic-v56"
+      },
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [],
+      "used": false,
+      "usedBy": []
+    },
+    "assets/template/fonts/Figtree-VF.subset.woff2": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "template",
+      "referenceEvidence": [
+        "assets/template/fonts/ui_bold.tres",
+        "assets/template/fonts/ui_medium.tres",
+        "assets/template/fonts/ui_regular.tres"
+      ],
+      "regions": [],
+      "sha256": "sha256:b3976c5969c8b1afd81dc3e314b61d8ffe3f3f58cf40906443105d330e6e0bdf",
+      "shipped": true,
+      "size": 23660,
+      "source": {
+        "starterId": "game-generic-v56"
+      },
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [
+        "assets/template/fonts/ui_bold.tres",
+        "assets/template/fonts/ui_medium.tres",
+        "assets/template/fonts/ui_regular.tres"
+      ],
+      "used": true,
+      "usedBy": []
+    },
+    "assets/template/fonts/NotoSansSC-VF.subset.woff2": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {
+        "id": "OFL-1.1",
+        "url": "https://openfontlicense.org/open-font-license-official-text/"
+      },
+      "origin": "template",
+      "referenceEvidence": [
+        "assets/template/fonts/noto_sans_sc_bold.tres",
+        "assets/template/fonts/noto_sans_sc_medium.tres",
+        "assets/template/fonts/noto_sans_sc_regular.tres"
+      ],
+      "regions": [],
+      "sha256": "sha256:38f4c5f927f746b3dfa4c3a5d7edf0b7a3e828e27438418fa54f9e1565289412",
+      "shipped": true,
+      "size": 1869368,
+      "source": {
+        "name": "NotoSansSC-VF.subset.woff2",
+        "starterId": "game-generic-v56"
+      },
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [
+        "assets/template/fonts/noto_sans_sc_bold.tres",
+        "assets/template/fonts/noto_sans_sc_medium.tres",
+        "assets/template/fonts/noto_sans_sc_regular.tres"
+      ],
+      "used": true,
+      "usedBy": []
+    },
+    "assets/template/fonts/display/Sora-VF.subset.woff2": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "template",
+      "referenceEvidence": [],
+      "regions": [],
+      "sha256": "sha256:438fbf4582548e76b266a738f2c11bcbd5137978f2d2e2f3aaabd49df69186f2",
+      "shipped": true,
+      "size": 41696,
+      "source": {
+        "starterId": "game-generic-v56"
+      },
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [],
+      "used": false,
+      "usedBy": []
+    },
+    "assets/template/powerups/energy.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "template",
+      "referenceEvidence": [],
+      "regions": [],
+      "sha256": "sha256:ffd7906f240f928e785d7c19a9e7a7b5dfab0d7483be5205dda3e4ba17ebe06a",
+      "shipped": true,
+      "size": 50950,
+      "source": {
+        "starterId": "game-generic-v56"
+      },
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [],
+      "used": false,
+      "usedBy": []
+    },
+    "assets/template/powerups/magnet.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "template",
+      "referenceEvidence": [],
+      "regions": [],
+      "sha256": "sha256:6e7354aa6510a462717218b09b9d784bb161b87878bff62ef4f2a9d03c053de7",
+      "shipped": true,
+      "size": 53724,
+      "source": {
+        "starterId": "game-generic-v56"
+      },
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [],
+      "used": false,
+      "usedBy": []
+    },
+    "assets/template/powerups/overdrive.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "template",
+      "referenceEvidence": [],
+      "regions": [],
+      "sha256": "sha256:6a48a85886c0551c1af0df576b0225f0ec3ae86b326fd84fc614083fbfe2908b",
+      "shipped": true,
+      "size": 37238,
+      "source": {
+        "starterId": "game-generic-v56"
+      },
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [],
+      "used": false,
+      "usedBy": []
+    },
+    "assets/template/powerups/shield.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "template",
+      "referenceEvidence": [],
+      "regions": [],
+      "sha256": "sha256:8cebf0cf730ca35c8c8697192ef78121c926442328a0725e0bd3e31701d64f13",
+      "shipped": true,
+      "size": 39659,
+      "source": {
+        "starterId": "game-generic-v56"
+      },
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [],
+      "used": false,
+      "usedBy": []
+    },
+    "assets/template/powerups/slow_field.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "template",
+      "referenceEvidence": [],
+      "regions": [],
+      "sha256": "sha256:96874c000866b2e7503b40da73888afb918ae36e462f51488415157da52a8637",
+      "shipped": true,
+      "size": 49145,
+      "source": {
+        "starterId": "game-generic-v56"
+      },
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [],
+      "used": false,
+      "usedBy": []
+    },
+    "assets/template/ui/loading-background.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "template",
+      "referenceEvidence": [],
+      "regions": [],
+      "sha256": "sha256:16dde3061f4e60802f8f0d1a6b875e72b6add05192237b03fef1fd313968a13a",
+      "shipped": true,
+      "size": 473356,
+      "source": {
+        "starterId": "game-generic-v56"
+      },
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [],
+      "used": false,
+      "usedBy": []
+    },
+    "assets/template/ui/pause_glass.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "template",
+      "referenceEvidence": [],
+      "regions": [],
+      "sha256": "sha256:c88a4725838df85e72c7270865848f275b62c525c5679a2a8b7ecefb1af82d4b",
+      "shipped": true,
+      "size": 115691,
+      "source": {
+        "starterId": "game-generic-v56"
+      },
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [],
+      "used": false,
+      "usedBy": []
+    },
+    "assets/template/ui/title_glass.png": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "template",
+      "referenceEvidence": [],
+      "regions": [],
+      "sha256": "sha256:8860db07768f093d4effea10b51431f76a1552d4bc7fd4e57757f189c51f0429",
+      "shipped": true,
+      "size": 155592,
+      "source": {
+        "starterId": "game-generic-v56"
+      },
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [],
+      "used": false,
+      "usedBy": []
+    },
+    "fonts/NotoSansTC-WordTiles-Bold.woff2": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "unknown",
+      "referenceEvidence": [
+        "assets/template/fonts/noto_sans_tc_bold.tres"
+      ],
+      "regions": [],
+      "sha256": "sha256:571b8a66b711fcf9e916d0a12f50e8f8e5df32c3c60ca431d43f1548c473af94",
+      "shipped": true,
+      "size": 99592,
+      "source": {},
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [
+        "assets/template/fonts/noto_sans_tc_bold.tres"
+      ],
+      "used": true,
+      "usedBy": []
+    },
+    "fonts/NotoSansTC-WordTiles-Medium.woff2": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "unknown",
+      "referenceEvidence": [
+        "assets/template/fonts/noto_sans_tc_medium.tres"
+      ],
+      "regions": [],
+      "sha256": "sha256:02fd15d8dc19df9a914f6f5a6456c9c838426c11c42897dab9fb0d0276ee7f26",
+      "shipped": true,
+      "size": 97704,
+      "source": {},
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [
+        "assets/template/fonts/noto_sans_tc_medium.tres"
+      ],
+      "used": true,
+      "usedBy": []
+    },
+    "fonts/NotoSansTC-WordTiles-Regular.woff2": {
+      "declaredUseEvidence": [],
+      "generator": {},
+      "inputs": [],
+      "license": {},
+      "origin": "unknown",
+      "referenceEvidence": [
+        "assets/template/fonts/noto_sans_tc_regular.tres"
+      ],
+      "regions": [],
+      "sha256": "sha256:55db9d3478db9087b820765779fb7cb88b1682141b6623a2431814437e31b177",
+      "shipped": true,
+      "size": 97600,
+      "source": {},
+      "status": "present",
+      "transformations": [],
+      "useEvidence": [
+        "assets/template/fonts/noto_sans_tc_regular.tres"
+      ],
+      "used": true,
+      "usedBy": []
+    }
+  },
+  "discoveries": {},
+  "downloads": {},
+  "export": {
+    "coverage": "verified",
+    "hostMedia": [
+      {
+        "contentMatches": [],
+        "path": "index.apple-touch-icon.png",
+        "sha256": "sha256:51c0204490f719ddd36d3afd1f80e6fd305287551435603eb0f02d7319783a2d",
+        "size": 57041,
+        "sourcePaths": []
+      },
+      {
+        "contentMatches": [],
+        "path": "index.icon.png",
+        "sha256": "sha256:c4d464cbbf501530a5ede1b0ae3653e00b3eb4a29096f1cc1fc31c670f69813b",
+        "size": 118358,
+        "sourcePaths": []
+      },
+      {
+        "contentMatches": [],
+        "path": "index.png",
+        "sha256": "sha256:3cb4495c0b98dfbe4b663cbf2b6836473572339beb66d902367893162a70be0e",
+        "size": 21443,
+        "sourcePaths": []
+      },
+      {
+        "contentMatches": [],
+        "path": "share/4570dd921bab6eb7012c92720ce30eb0daaf1523334ed265268e447a90aeb801.png",
+        "sha256": "sha256:4570dd921bab6eb7012c92720ce30eb0daaf1523334ed265268e447a90aeb801",
+        "size": 5683589,
+        "sourcePaths": [
+          "assets/share/og.png"
+        ]
+      },
+      {
+        "contentMatches": [],
+        "path": "share/7b955fea90dd9df512f350f4eb3ed40d3a9cb909d2b953a6d293598928b94951.png",
+        "sha256": "sha256:7b955fea90dd9df512f350f4eb3ed40d3a9cb909d2b953a6d293598928b94951",
+        "size": 117837,
+        "sourcePaths": [
+          "assets/share/favicon-256.png"
+        ]
+      }
+    ],
+    "pckSha256": "sha256:1aec299f770cc6445f8f9bc187652292dbe0e331f9347a470f014448e8cee54c",
+    "profile": "release",
+    "sourceFingerprint": "sha256:f1eaad620f862f2df2ad04a64a5e9785eb88a306540ca5d18d28699688381c5d"
+  },
+  "procedures": {},
+  "summary": {
+    "ancestry": {
+      "ai": {
+        "retained": 0,
+        "shipped": 0,
+        "used": 0
+      },
+      "catalog": {
+        "retained": 0,
+        "shipped": 0,
+        "used": 0
+      },
+      "procedural": {
+        "retained": 0,
+        "shipped": 0,
+        "used": 0
+      }
+    },
+    "derivatives": {
+      "retained": 0,
+      "shipped": 0,
+      "used": 0
+    },
+    "exportedHostMedia": {
+      "paths": 5,
+      "uniqueHashes": 5,
+      "unmatchedSourcePaths": 3
+    },
+    "files": {
+      "downloaded": 0,
+      "retained": 21,
+      "shipped": 21,
+      "used": 7
+    },
+    "origins": {
+      "ai": {
+        "retained": 0,
+        "shipped": 0,
+        "used": 0
+      },
+      "catalog": {
+        "retained": 0,
+        "shipped": 0,
+        "used": 0
+      },
+      "derivative": {
+        "retained": 0,
+        "shipped": 0,
+        "used": 0
+      },
+      "external": {
+        "retained": 0,
+        "shipped": 0,
+        "used": 0
+      },
+      "procedural": {
+        "retained": 0,
+        "shipped": 0,
+        "used": 0
+      },
+      "template": {
+        "retained": 15,
+        "shipped": 15,
+        "used": 2
+      },
+      "unknown": {
+        "retained": 6,
+        "shipped": 6,
+        "used": 5
+      }
+    },
+    "packs": {
+      "discovered": 0,
+      "downloaded": 0,
+      "shipped": 0,
+      "used": 0
+    },
+    "proceduralSystems": {
+      "retained": 0,
+      "used": 0
+    },
+    "spriteRegions": {
+      "retained": 0,
+      "shipped": 0,
+      "used": 0
+    },
+    "visualCoverage": {
+      "approvedRevision": 3,
+      "blueprintId": "gbp_4e9fb93077484b4464f626b6",
+      "committedRoles": 4,
+      "expectedDigest": "4947897380c38d23bf1bef0f1632a03292079e5281a591b04253e63e5373668c",
+      "fulfilledRoles": 0,
+      "roles": [
+        {
+          "id": "letter_tile_system",
+          "reasons": [
+            "unresolved"
+          ],
+          "status": "unresolved"
+        },
+        {
+          "id": "landscape_table_layout",
+          "reasons": [
+            "unresolved"
+          ],
+          "status": "unresolved"
+        },
+        {
+          "id": "opponent_status_visuals",
+          "reasons": [
+            "unresolved"
+          ],
+          "status": "unresolved"
+        },
+        {
+          "id": "claim_win_feedback",
+          "reasons": [
+            "unresolved"
+          ],
+          "status": "unresolved"
+        }
+      ],
+      "search": {
+        "checkedPages": 0,
+        "outcomes": 0,
+        "overflowEvents": 0,
+        "requests": 0
+      },
+      "selectedButUnusedAssets": [],
+      "staleRenderedEvidence": [],
+      "status": "incomplete",
+      "unexplainedFallbacks": [],
+      "unresolvedRoles": [
+        "letter_tile_system",
+        "landscape_table_layout",
+        "opponent_status_visuals",
+        "claim_win_feedback"
+      ],
+      "visualQuality": "requires_agent_review"
+    }
+  },
+  "version": 1,
+  "visualCoverage": {
+    "attempts": {},
+    "expected": {
+      "approvedRevision": 3,
+      "blueprintId": "gbp_4e9fb93077484b4464f626b6",
+      "digest": "4947897380c38d23bf1bef0f1632a03292079e5281a591b04253e63e5373668c",
+      "roles": [
+        {
+          "description": "為你的 A–Z 字牌與空白百搭牌建立一致、易辨識的正面、背面、選取、摸入與棄出狀態；字母與單字維持英文，不能讓三張同字母看似特殊牌型。",
+          "id": "letter_tile_system",
+          "label": "英文字牌視覺系統"
+        },
+        {
+          "description": "為你的橫向對局清楚劃分手牌、牌牆／牌堆、中央棄牌與對手區域，支援 13／14 張手牌變化，且不把私下組成的單字誤畫成公開副露。",
+          "id": "landscape_table_layout",
+          "label": "橫向牌桌與牌區"
+        },
+        {
+          "description": "為你的模擬多人局面提供簡潔的對手識別、手牌數量、輪次及搶胡／多人同時胡狀態，不暗示帳號、連線或排行榜功能。",
+          "id": "opponent_status_visuals",
+          "label": "單機對手狀態視覺"
+        },
+        {
+          "description": "讓你的可吃牌、吃牌後必須打牌、搶胡、多人同時胡及單字字典驗證結果清楚可見；不加入碰、槓或公開副露的視覺。",
+          "id": "claim_win_feedback",
+          "label": "吃牌與和牌互動回饋"
+        }
+      ]
+    },
+    "overflowEvents": 0,
+    "resolutions": {},
+    "version": 1
+  }
+}

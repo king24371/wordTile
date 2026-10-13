@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 2,
+  "title": "Word Tiles｜英文麻將",
+  "description": "單機英文拼字麻將：摸牌、吃牌，以 14 張牌拼成字典確認的英文單字或單字加一對。",
+  "defaultCaptions": {},
+  "assets": {
+    "og": "assets/share/og.png",
+    "favicon": "assets/share/favicon-256.png"
+  }
+}

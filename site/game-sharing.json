@@ -1,0 +1,27 @@
+{
+  "schemaVersion": 2,
+  "publicationOrigin": "https://wordtiles-hqvybl4y.manus.game",
+  "title": "Word Tiles｜英文麻將",
+  "description": "單機英文拼字麻將：摸牌、吃牌，以 14 張牌拼成字典確認的英文單字或單字加一對。",
+  "defaultCaptions": {},
+  "assets": {
+    "og": {
+      "digest": "sha256:4570dd921bab6eb7012c92720ce30eb0daaf1523334ed265268e447a90aeb801",
+      "path": "share/4570dd921bab6eb7012c92720ce30eb0daaf1523334ed265268e447a90aeb801.png",
+      "mime": "image/png",
+      "width": 2560,
+      "height": 1440,
+      "sizeBytes": 5683589,
+      "sourcePath": "assets/share/og.png"
+    },
+    "favicon": {
+      "digest": "sha256:7b955fea90dd9df512f350f4eb3ed40d3a9cb909d2b953a6d293598928b94951",
+      "path": "share/7b955fea90dd9df512f350f4eb3ed40d3a9cb909d2b953a6d293598928b94951.png",
+      "mime": "image/png",
+      "width": 256,
+      "height": 256,
+      "sizeBytes": 117837,
+      "sourcePath": "assets/share/favicon-256.png"
+    }
+  }
+}
