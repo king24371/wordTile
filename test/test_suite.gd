@@ -124,6 +124,8 @@ func _test_runtime_loop() -> void:
 	var opponents: Array = main.get("_opponents")
 	var wall: Array = main.get("_deck")
 	_check(hand.size() == 13, "new round deals 13 player tiles")
+	var win_button: Button = main.get("_win_button")
+	_check(win_button.disabled, "win declaration is disabled while the player holds only 13 tiles")
 	_check(opponents.size() == 3, "single-player table has three simulated opponents")
 	_check(opponents.all(func(opponent: Dictionary) -> bool: return (opponent.get("hand", []) as Array).size() == 13), "each simulated opponent starts with 13 tiles")
 	_check(opponents.all(func(opponent: Dictionary) -> bool: return not opponent.has("profile")), "bots do not carry fixed prearranged winning profiles")
@@ -163,12 +165,13 @@ func _test_runtime_loop() -> void:
 	var safe_hand: Array = safe_deck.slice(0, 13)
 	var safe_opponents: Array[Dictionary] = []
 	for index: int in 3:
-		var bot_hand: Array = _make_waiting_hand(600 + index * 100) if index == 0 else safe_hand.duplicate(true)
+		var bot_hand: Array = safe_hand.duplicate(true)
 		safe_opponents.append({"name": ["青竹", "墨玉", "金雀"][index], "seat": index + 1, "hand": bot_hand})
 	main.set("_opponents", safe_opponents)
 	main.call("_draw_for_player")
 	hand = main.get("_hand")
 	_check(hand.size() == 14 and str(main.get("_phase")) == "player_discard", "drawing changes the player hand from 13 to 14")
+	_check(not win_button.disabled, "win declaration lights only after the player has 14 tiles")
 	main.call("_claim_win")
 	_check(bool(main.get("_win_form_open")), "win declaration opens only when the player claims to win")
 	var entry: LineEdit = main.get("_win_words_entry")
@@ -182,6 +185,7 @@ func _test_runtime_loop() -> void:
 		main.call("_discard_selected")
 		_check((main.get("_hand") as Array).size() == 13, "discarding returns the player hand to 13")
 		_check((main.get("_discards") as Array).size() == 1, "discard is placed in the central discard area")
+		_check(int((main.get("_discards") as Array)[0].get("discarder_seat", -1)) == 0, "player discards are tagged to the player's river")
 	main.set("_phase", "result")
 	await get_tree().process_frame
 	var eat_hand: Array = safe_hand.duplicate(true)
@@ -189,15 +193,46 @@ func _test_runtime_loop() -> void:
 	main.set("_hand", eat_hand)
 	main.set("_phase", "claim")
 	main.set("_claim_tile", eat_tile)
+	main.set("_claim_source_seat", 1)
 	main.set("_pending_bot_winners", ["青竹"])
-	var one_discard: Array[Dictionary] = [eat_tile]
+	var discard_entry := eat_tile.duplicate(true)
+	discard_entry["discarder_seat"] = 1
+	var one_discard: Array[Dictionary] = [discard_entry]
 	main.set("_discards", one_discard)
 	main.call("_refresh_all")
 	var eat_button: Button = main.get("_eat_button")
-	_check(not eat_button.disabled, "free eating remains available even when a bot can claim a genuine win")
+	_check(eat_button.disabled, "the player cannot eat a discard from a seat other than the upper player")
+	_check(not win_button.disabled, "13 hand tiles plus the offered discard make a valid 14-tile win candidate")
+	var twelve_tiles: Array = safe_hand.slice(0, 12)
+	main.set("_hand", twelve_tiles)
+	main.call("_refresh_all")
+	_check(win_button.disabled, "win declaration remains disabled when hand plus offered discard is only 13")
+	main.set("_hand", safe_hand.duplicate(true))
+	main.call("_refresh_all")
 	main.call("_eat_discard")
-	_check((main.get("_hand") as Array).size() == 14 and str(main.get("_phase")) == "player_discard", "eating any discard is allowed, with a required discard afterward")
+	_check((main.get("_hand") as Array).size() == 13 and str(main.get("_phase")) == "claim", "a direct attempt to eat a non-upper discard is rejected")
+	main.set("_claim_source_seat", 3)
+	discard_entry["discarder_seat"] = 3
+	main.set("_discards", [discard_entry])
+	main.call("_refresh_all")
+	_check(not eat_button.disabled, "eating is enabled for the upper player's discard even when another bot can claim a genuine win")
+	main.call("_eat_discard")
+	_check((main.get("_hand") as Array).size() == 14 and str(main.get("_phase")) == "player_discard", "eating the upper player's discard requires the player to discard afterward")
 	_check((main.get("_pending_bot_winners") as Array).is_empty(), "eating claims the discard; passing instead allows the verified bot win")
+	var full_rivers: Array[Dictionary] = []
+	for index: int in 56:
+		var river_tile := Rules.make_tile(9000 + index, "B")
+		river_tile["discarder_seat"] = index % 4
+		full_rivers.append(river_tile)
+	main.set("_discards", full_rivers)
+	main.call("_refresh_all")
+	var river_rows: Array = main.get("_discard_rows")
+	var rendered_river_tiles := 0
+	for seat: int in 4:
+		var river_row := river_rows[seat] as HFlowContainer
+		_check(river_row.get_child_count() == 14, "seat %d's complete 14-tile river is rendered" % seat)
+		rendered_river_tiles += river_row.get_child_count()
+	_check(rendered_river_tiles == full_rivers.size(), "the discard display does not truncate the complete 56-tile table")
 	var reveal_tile := Rules.make_tile(8001, "A")
 	main.call("_finish_round", ["青竹", "墨玉"], "搶胡", {}, reveal_tile)
 	var revealed_bamboo: Array = main.call("_hand_for_result", "青竹")

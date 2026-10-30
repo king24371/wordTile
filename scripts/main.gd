@@ -29,6 +29,7 @@ var _opponents: Array[Dictionary] = []
 var _discards: Array[Dictionary] = []
 var _selected_ids: Array[int] = []
 var _claim_tile: Dictionary = {}
+var _claim_source_seat := -1
 var _pending_bot_winners: Array[String] = []
 var _pending_next_seat := 0
 var _round_number := 0
@@ -65,7 +66,9 @@ var _wall_label: Label
 var _turn_label: Label
 var _hand_count_label: Label
 var _hand_flow: HFlowContainer
-var _discard_grid: GridContainer
+var _discard_rows: Array[HFlowContainer] = []
+var _discard_row_labels: Array[Label] = []
+var _discard_legend_label: Label
 var _claim_slot: HBoxContainer
 var _claim_tile_button: Button
 var _claim_text: Label
@@ -245,17 +248,30 @@ func _build_table_area(parent: VBoxContainer) -> void:
 	discard_panel.add_child(discard_content)
 	var discard_header := HBoxContainer.new()
 	discard_content.add_child(discard_header)
-	var discard_title := _make_label("中央棄牌", 16, CREAM, true)
+	var discard_title := _make_label("全員牌河", 16, CREAM, true)
 	discard_title.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	discard_header.add_child(discard_title)
-	var discard_legend := _make_label("最新 16 張", 12, MUTED)
-	discard_header.add_child(discard_legend)
-	_discard_grid = GridContainer.new()
-	_discard_grid.columns = 8
-	_discard_grid.add_theme_constant_override("h_separation", 6)
-	_discard_grid.add_theme_constant_override("v_separation", 6)
-	_discard_grid.size_flags_vertical = Control.SIZE_EXPAND_FILL
-	discard_content.add_child(_discard_grid)
+	_discard_legend_label = _make_label("0 張", 12, MUTED)
+	discard_header.add_child(_discard_legend_label)
+	var discard_rows_box := VBoxContainer.new()
+	discard_rows_box.add_theme_constant_override("separation", 2)
+	discard_content.add_child(discard_rows_box)
+	for seat: int in 4:
+		var discard_row := HBoxContainer.new()
+		discard_row.add_theme_constant_override("separation", 6)
+		discard_rows_box.add_child(discard_row)
+		var seat_label := _make_label("你" if seat == 0 else "對手 %02d" % seat, 12, TEAL, true)
+		seat_label.custom_minimum_size.x = 62.0
+		seat_label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
+		discard_row.add_child(seat_label)
+		_discard_row_labels.append(seat_label)
+		var tile_flow := HFlowContainer.new()
+		tile_flow.add_theme_constant_override("h_separation", 3)
+		tile_flow.add_theme_constant_override("v_separation", 2)
+		tile_flow.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+		tile_flow.custom_minimum_size.y = 38.0
+		discard_row.add_child(tile_flow)
+		_discard_rows.append(tile_flow)
 	var side_panel := _make_panel(SURFACE, BORDER, Vector2(18.0, 12.0))
 	side_panel.custom_minimum_size.x = 284.0
 	side_panel.size_flags_vertical = Control.SIZE_EXPAND_FILL
@@ -459,7 +475,7 @@ func _build_help_overlay() -> void:
 	content.add_child(title)
 	var rules_text := _make_label("• 起手 13 張；摸牌或吃牌後 14 張，打出一張回到 13 張。
 • 可拖曳手牌自由排序；點選一張牌後打出。
-• 遇到對手棄牌，可自由選擇吃牌；吃牌後若未和，必須打出一張。
+• 只能吃上家（緊鄰你之前行動的對手）棄牌；吃牌後若未和，必須打出一張。
 • 申報和牌時才以逗號輸入全部單字，外部字典逐一查核；單字不可重複。
 • 14 張全組成有效單字可和；或 12 張單字加一對相同字母。
 • A、E、I、O、U 母音牌為紅色；? 是空白百搭。
@@ -629,6 +645,7 @@ func _start_round() -> void:
 	_discards.clear()
 	_selected_ids.clear()
 	_claim_tile.clear()
+	_claim_source_seat = -1
 	_pending_bot_winners.clear()
 	_last_win.clear()
 	_last_win_tile.clear()
@@ -716,6 +733,12 @@ func _reorder_hand_tile(source_tile_id: int, target_tile_id: int, insert_after: 
 
 
 
+func _record_discard(tile: Dictionary, seat: int) -> void:
+	var entry := tile.duplicate(true)
+	entry["discarder_seat"] = seat
+	_discards.append(entry)
+
+
 func _discard_selected() -> void:
 	if _phase != "player_discard" or _hand.size() != 14 or _selected_ids.size() != 1:
 		return
@@ -724,7 +747,7 @@ func _discard_selected() -> void:
 	if tile.is_empty():
 		return
 	_hand.erase(tile)
-	_discards.append(tile)
+	_record_discard(tile, 0)
 	_selected_ids.clear()
 	_pending_bot_winners = Rules.find_claiming_opponents(_opponents, tile, 0, _dictionary.get_cache())
 	if not _pending_bot_winners.is_empty():
@@ -761,16 +784,17 @@ func _run_bot_turn(seat: int) -> void:
 		return
 	bot_hand.erase(drawn)
 	bot["hand"] = bot_hand
-	_discards.append(drawn)
+	_record_discard(drawn, seat)
 	_pending_next_seat = (seat + 1) % 4
 	_pending_bot_winners = Rules.find_claiming_opponents(_opponents, drawn, seat, _dictionary.get_cache())
 	_claim_tile = drawn
+	_claim_source_seat = seat
 	_phase = "claim"
 	_selected_ids.clear()
 	if _pending_bot_winners.is_empty():
-		_status_text = "%s 打出 %s。你可自由吃牌、申報和牌或過牌。" % [str(bot.get("name", "對手")), _tile_name(drawn)]
+		_status_text = "%s 打出 %s。只有上家棄牌可吃；你也可申報和牌或過牌。" % [str(bot.get("name", "對手")), _tile_name(drawn)]
 	else:
-		_status_text = "%s 打出 %s；有對手實際符合搶胡牌型。你仍可用同一張牌申報和牌或過牌。" % [str(bot.get("name", "對手")), _tile_name(drawn)]
+		_status_text = "%s 打出 %s；有對手實際符合搶胡牌型。你仍可申報和牌或過牌；僅上家棄牌可吃。" % [str(bot.get("name", "對手")), _tile_name(drawn)]
 	_refresh_all()
 
 func _claim_win() -> void:
@@ -870,15 +894,16 @@ func _complete_win_submission() -> void:
 		_finish_round(["你"], "自摸", result)
 
 func _eat_discard() -> void:
-	if _phase != "claim" or _claim_tile.is_empty():
+	if _phase != "claim" or _claim_tile.is_empty() or _claim_source_seat != 3:
 		return
 	_hand.append(_claim_tile.duplicate(true))
 	_remove_discard_by_id(int(_claim_tile.get("id", -1)))
 	_claim_tile.clear()
+	_claim_source_seat = -1
 	_pending_bot_winners.clear()
 	_selected_ids.clear()
 	_phase = "player_discard"
-	_status_text = "你已自由吃進這張牌。若未和牌，現在必須打出一張牌。"
+	_status_text = "你已吃進上家棄牌。若未和牌，現在必須打出一張牌。"
 	_refresh_all()
 
 func _pass_claim() -> void:
@@ -888,9 +913,11 @@ func _pass_claim() -> void:
 		var winning_tile := _claim_tile.duplicate(true)
 		_remove_discard_by_id(int(winning_tile.get("id", -1)))
 		_claim_tile.clear()
+		_claim_source_seat = -1
 		_finish_round(_pending_bot_winners, "搶胡", {}, winning_tile)
 		return
 	_claim_tile.clear()
+	_claim_source_seat = -1
 	_selected_ids.clear()
 	var next_seat := _pending_next_seat
 	if next_seat == 0:
@@ -902,6 +929,7 @@ func _pass_claim() -> void:
 
 func _open_claim_window(discard_tile: Dictionary, source_seat: int) -> void:
 	_claim_tile = discard_tile.duplicate(true)
+	_claim_source_seat = source_seat
 	_pending_bot_winners = Rules.find_claiming_opponents(_opponents, _claim_tile, source_seat, _dictionary.get_cache())
 	_pending_next_seat = (source_seat + 1) % 4
 	_phase = "claim"
@@ -911,6 +939,7 @@ func _open_claim_window(discard_tile: Dictionary, source_seat: int) -> void:
 
 func _finish_round(winners: Array, reason: String, outcome: Dictionary = {}, winning_tile: Dictionary = {}) -> void:
 	_phase = "result"
+	_claim_source_seat = -1
 	_win_form_open = false
 	_win_context = ""
 	_active_win_request_prefix = ""
@@ -970,26 +999,23 @@ func _refresh_opponents() -> void:
 			detail.text = "%d 張暗牌" % bot_hand.size()
 
 func _refresh_discards() -> void:
-	if _discard_grid == null:
+	if _discard_rows.size() != 4:
 		return
-	_clear_container(_discard_grid)
-	if _discards.is_empty():
-		var empty := _make_label("尚無棄牌", 14, MUTED)
-		empty.custom_minimum_size = Vector2(330.0, 58.0)
-		_discard_grid.add_child(empty)
-		return
-	var first := maxi(0, _discards.size() - 16)
-	for index: int in range(first, _discards.size()):
-		var tile: Dictionary = _discards[index]
-		var button := _make_small_tile(tile)
-		_discard_grid.add_child(button)
+	for seat: int in 4:
+		_clear_container(_discard_rows[seat])
+		_discard_row_labels[seat].text = "你" if seat == 0 else _opponent_name(seat)
+	_discard_legend_label.text = "%d 張" % _discards.size()
+	for tile: Dictionary in _discards:
+		var seat := clampi(int(tile.get("discarder_seat", 0)), 0, 3)
+		_discard_rows[seat].add_child(_make_small_tile(tile))
 
 
 func _make_small_tile(tile: Dictionary) -> Control:
 	var label := _make_label(_tile_name(tile), 19, _tile_text_color(tile), true)
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.vertical_alignment = VERTICAL_ALIGNMENT_CENTER
-	label.custom_minimum_size = Vector2(38.0, 48.0)
+	label.custom_minimum_size = Vector2(30.0, 36.0)
+	label.add_theme_font_size_override("font_size", 16)
 	var panel := PanelContainer.new()
 	var style := _tile_style(Color("#f0e7d3"), GOLD_DARK, false)
 	panel.add_theme_stylebox_override("panel", style)
@@ -1015,16 +1041,17 @@ func _refresh_claim_slot() -> void:
 		_claim_tile_button.text = _tile_name(_claim_tile)
 		_claim_tile_button.add_theme_color_override("font_color", _tile_text_color(_claim_tile))
 		_claim_tile_button.custom_minimum_size = Vector2(56.0, 66.0)
+		var eat_hint := "可吃這張上家棄牌。" if _claim_source_seat == 3 else "此非上家棄牌，不能吃。"
 		if _pending_bot_winners.is_empty():
-			_claim_text.text = "此棄牌可自由吃牌；過牌將輪到下一位。"
+			_claim_text.text = "%s 過牌將輪到下一位。" % eat_hint
 		else:
-			_claim_text.text = "實際符合搶胡：%s。仍可吃牌；過牌會讓對手和牌。" % "、".join(_pending_bot_winners)
+			_claim_text.text = "實際符合搶胡：%s。%s過牌會讓對手和牌。" % ["、".join(_pending_bot_winners), eat_hint]
 	else:
 		_claim_text.text = ""
 
 func _on_claim_tile_button_pressed() -> void:
 	if _phase == "claim":
-		_status_text = "可自由吃進這張棄牌；若對手符合搶胡，選擇過牌才會讓對手和牌。"
+		_status_text = "僅能吃上家棄牌；此牌%s。可申報和牌，或過牌。" % ("來自上家" if _claim_source_seat == 3 else "不是上家打出的")
 		_refresh_all()
 
 func _refresh_buttons() -> void:
@@ -1032,9 +1059,12 @@ func _refresh_buttons() -> void:
 		return
 	_draw_button.disabled = _phase != "player_draw" or _win_form_open
 	_discard_button.disabled = _phase != "player_discard" or _hand.size() != 14 or _selected_ids.size() != 1 or _win_form_open
-	_eat_button.disabled = _phase != "claim" or _win_form_open
+	_eat_button.disabled = _phase != "claim" or _claim_source_seat != 3 or _win_form_open
 	_pass_button.disabled = _phase != "claim" or _win_form_open
-	var can_declare := (_phase == "player_discard" and _hand.size() == Rules.HAND_SIZE) or (_phase == "claim" and not _claim_tile.is_empty() and _hand.size() == Rules.HAND_SIZE - 1)
+	var candidate_count := _hand.size()
+	if _phase == "claim" and not _claim_tile.is_empty():
+		candidate_count += 1
+	var can_declare := _phase in ["player_discard", "claim"] and candidate_count == Rules.HAND_SIZE
 	_win_button.disabled = not can_declare or _win_form_open
 
 func _refresh_result() -> void:
