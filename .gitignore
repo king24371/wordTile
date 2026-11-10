@@ -21,6 +21,25 @@ node_modules/
 /assets/**/*.otf
 /assets/**/*.woff
 /assets/**/*.woff2
+# Source checkouts should include Godot media assets; keep build/cache ignores above intact.
+!assets/**/*.png
+!assets/**/*.jpg
+!assets/**/*.jpeg
+!assets/**/*.webp
+!assets/**/*.gif
+!assets/**/*.bmp
+!assets/**/*.svg
+!assets/**/*.ico
+!assets/**/*.ogg
+!assets/**/*.wav
+!assets/**/*.mp3
+!assets/**/*.m4a
+!assets/**/*.mp4
+!assets/**/*.webm
+!assets/**/*.ttf
+!assets/**/*.otf
+!assets/**/*.woff
+!assets/**/*.woff2
 !assets/share/favicon-256.png
 !assets/share/og.png
 
