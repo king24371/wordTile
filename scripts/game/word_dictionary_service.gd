@@ -2,6 +2,7 @@ class_name WordDictionaryService
 extends Node
 
 signal validation_finished(tag: String, word: String, is_valid: bool, message: String)
+signal pattern_search_finished(tag: String, pattern: String, words: Array[String], message: String)
 
 const Rules := preload("res://scripts/game/word_mahjong_rules.gd")
 const DATAMUSE_ROOT := "https://api.datamuse.com/words?sp="
@@ -13,6 +14,8 @@ var _cache: Dictionary = {}
 var _queue: Array[String] = []
 var _tags_by_word: Dictionary = {}
 var _active_requests: Dictionary = {}
+var _pattern_queue: Array[Dictionary] = []
+var _active_pattern_requests := 0
 
 
 func verify_word(raw_word: String, tag: String = "") -> void:
@@ -30,6 +33,73 @@ func verify_word(raw_word: String, tag: String = "") -> void:
 	_tags_by_word[word] = [tag]
 	_queue.append(word)
 	_start_pending_requests()
+
+
+func search_pattern(raw_pattern: String, tag: String) -> void:
+	var pattern := raw_pattern.strip_edges().to_upper()
+	if pattern.length() < 2:
+		call_deferred("_emit_empty_pattern_result", tag, pattern, "單字至少需要兩張牌。")
+		return
+	for index: int in pattern.length():
+		var letter := pattern.substr(index, 1)
+		if letter != "?" and not Rules.LETTERS.contains(letter):
+			call_deferred("_emit_empty_pattern_result", tag, pattern, "拼字模式只能包含英文字母與空白牌。")
+			return
+	_pattern_queue.append({"pattern": pattern, "tag": tag})
+	_start_pending_pattern_requests()
+
+
+func _start_pending_pattern_requests() -> void:
+	while _active_pattern_requests < MAX_CONCURRENT_REQUESTS and not _pattern_queue.is_empty():
+		var item: Dictionary = _pattern_queue.pop_front()
+		var pattern := str(item.get("pattern", ""))
+		var tag := str(item.get("tag", ""))
+		var request := HTTPRequest.new()
+		request.timeout = REQUEST_TIMEOUT_SECONDS
+		request.use_threads = true
+		request.request_completed.connect(_on_pattern_request_completed.bind(request, tag, pattern))
+		add_child(request)
+		var url := DATAMUSE_ROOT + pattern.uri_encode() + "&max=100&md=d"
+		var error := request.request(url, ["Accept: application/json"], HTTPClient.METHOD_GET)
+		if error != OK:
+			request.queue_free()
+			call_deferred("_emit_empty_pattern_result", tag, pattern, "外部字典 API 無法查詢拼字模式。")
+		else:
+			_active_pattern_requests += 1
+
+
+func _on_pattern_request_completed(result: int, response_code: int, _headers: PackedStringArray, body: PackedByteArray, request: HTTPRequest, tag: String, pattern: String) -> void:
+	var words: Array[String] = []
+	var message := ""
+	if result == HTTPRequest.RESULT_SUCCESS and response_code == 200:
+		var parsed: Variant = JSON.parse_string(body.get_string_from_utf8())
+		if parsed is Array:
+			for value: Variant in parsed:
+				if not value is Dictionary:
+					continue
+				var word := str(value.get("word", "")).strip_edges().to_upper()
+				if Rules.is_word_shape_valid(word) and word.length() == pattern.length() and not words.has(word):
+					words.append(word)
+					var definitions: Variant = value.get("defs", [])
+					if definitions is Array and not definitions.is_empty():
+						_cache[word] = true
+		else:
+			message = "外部字典回應格式無效。"
+	else:
+		message = "外部字典暫時無法查詢拼字模式。"
+	request.queue_free()
+	_active_pattern_requests = maxi(0, _active_pattern_requests - 1)
+	_emit_pattern_result(tag, pattern, words, message)
+	_start_pending_pattern_requests()
+
+
+func _emit_pattern_result(tag: String, pattern: String, words: Array[String], message: String) -> void:
+	pattern_search_finished.emit(tag, pattern, words, message)
+
+
+func _emit_empty_pattern_result(tag: String, pattern: String, message: String) -> void:
+	var words: Array[String] = []
+	_emit_pattern_result(tag, pattern, words, message)
 
 
 func has_result(word: String) -> bool:

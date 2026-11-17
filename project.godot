@@ -1,15 +1,22 @@
-; Godot project configuration for Word Tiles.
+; Engine configuration file.
+; It's best edited using the editor UI and not directly,
+; since the parameters that go here are not all obvious.
+;
+; Format:
+;   [section] ; section goes between []
+;   param=value ; assign values to parameters
+
 config_version=5
 
 [application]
 
-boot_splash/show_image=false
-boot_splash/bg_color=Color(0.03137, 0.13725, 0.114, 1)
 config/name="Word Tiles｜英文麻將"
 config/description="單機英文拼字麻將：以字母牌組成外部字典確認的英文單字。"
 config/version="1.0.0"
 run/main_scene="res://scenes/main.tscn"
 config/features=PackedStringArray("4.7", "GL Compatibility")
+boot_splash/bg_color=Color(0.03137, 0.13725, 0.114, 1)
+boot_splash/show_image=false
 config/icon="res://assets/share/favicon-256.png"
 
 [autoload]
@@ -28,12 +35,12 @@ window/size/viewport_height=720
 window/size/window_width_override=1280
 window/size/window_height_override=720
 window/stretch/mode="canvas_items"
-window/stretch/aspect="keep"
+
+[editor]
+
+import/use_multiple_threads=false
 
 [rendering]
 
 renderer/rendering_method="gl_compatibility"
 renderer/rendering_method.mobile="gl_compatibility"
-
-[editor]
-import/use_multiple_threads=false

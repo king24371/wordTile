@@ -1,19 +1,21 @@
 # Word Tiles｜英文麻將
 
-單機 2D 橫向英文麻將原型：摸牌、自由排列手牌、吃牌、打牌；玩家只在宣告和牌時輸入完整單字清單，由外部字典驗字。
+單機英文麻將：一副 124 張牌，包含英文字母、空白牌和 E/S/W/N 象牌；玩家以右鍵框選手牌組合，放開後由外部字典自動驗字。
 
 ## 規則與操作
 
-- 一副 108 張：A–Z 各 4 張、4 張空白百搭；起手 13 張，摸牌後 14 張，打牌後回到 13 張。
-- A、E、I、O、U 母音牌以紅色字母顯示。拖曳自己的手牌即可任意重新排列；點選一張牌後按「打出選取牌」。
-- 只能吃上家（緊鄰玩家之前行動的對手）棄牌，不需先組字；吃牌後若未和牌，仍必須打出一張。若其他對手能以該牌真實和牌，選擇吃進上家棄牌會攔下該牌；按「過牌」才讓已符合牌型的對手搶胡。沒有碰或槓。
-- 按「和牌／驗字」才輸入全部單字，使用逗號分隔（例如 `GAME,WORD,TILE`）。外部字典逐一確認單字後，系統再檢查 14 張牌是否全由單字組成，或是 12 張單字牌加一對相同字母；`?` 可代表任意字母。
-- 「和牌／驗字」只會在可和牌候選正好 14 張時啟用；搶胡時會把候選棄牌計入 14 張。四家棄牌依座位分列並保留完整牌河，不會只顯示最近 16 張。
-- 每張牌只能用一次；不同單字可用相同字母，但同一個和牌組合內不能重複同一單字。三張相同字母不算牌型。
-- 若單字不成立、外部字典尚未確認或查詢失敗，牌局不會結束；可修改申報或在網路恢復後重試。未和牌前不必公開已組單字。
+- 一副 124 張：A–Z 各 4 張、4 張空白百搭、E/S/W/N 象牌各 4 張；起手及打牌後 13 張，摸牌後 14 張。
+- A、E、I、O、U 母音牌以紅色字母顯示。左鍵拖曳手牌即可重新排列；右鍵拖曳框選牌組，放開後自動驗字。藍色表示選取或查核中，綠色表示已驗證並固定；再次框住整組可解除固定。
+- 象牌圖面對應 E 火、S 風、W 水、N 土；象牌不能組單字，僅可組對子、三條或四條。空白牌只能代替字母，不能代替象牌。
+- 只能吃上家字牌；吃牌後若未和牌，仍必須打出一張。象牌不能吃；碰、槓只限象牌。槓牌後從牌牆補一張，再打出一張。
+- 輪到玩家時自動摸牌；打出選取牌後，對手回合自動進行。遇到可吃、碰、槓或榮和的棄牌時，對應操作才會顯示；未操作會自動跳過。
+- 所有手牌須分組並完成外部字典查核，且整體牌型合法後才顯示「和牌／取消」；槓子按三張計，榮和時會把棄牌納入手牌框選。四家棄牌依座位分列並保留完整牌河。
+- 每張牌只能用一次；同一單字可重複申報，但不論重複幾次固定減一飜。
+- Fixet 須未吃、碰、槓且已有有效單字；若只聽一種或兩種牌，會在摸牌前提示是否宣告。門前清檢查副露碰槓。
+- 若單字不成立或字典未確認，該組不會固定；可重新框選，之後再次框住已驗證的組合可解除固定。已組好的牌仍保留在玩家手牌中。
 - 玩家與單機對手可搶同一張棄牌，多人可同時和牌；對手和牌後會揭示全部四位玩家的手牌，包括和牌者取得的棄牌。
 
-此原型為單機玩法，無連線、帳號或排行榜。三位對手由同一副已洗牌牌組隨機發牌，不使用預設待胡手牌；字母牌數維持每字母四張。對手使用 API 已確認的候選詞判定和牌，單字只由外部字典 API 回應確認，離線或查詢失敗時不會算有效。詳見[字典 API 說明](docs/external-dictionary-api.md)。
+此版本以三位隨機發牌的電腦對手模擬牌局，沒有連線或帳號。字母與象牌都從同一副洗牌牌組發牌；電腦和牌只使用 API 已確認的候選詞。玩家的單字由外部字典 API 回應確認，離線或查詢失敗時不會算有效。詳見[字典 API 說明](docs/external-dictionary-api.md)。
 
 ## 專案驗證
 
@@ -287,7 +289,6 @@ game-generic/
 │   └── score/run_score_service.gd
 ├── config/tuning.json            # typed six-category tuning catalog
 ├── localization/{en,zh-CN}.json
-├── docs/minimalist-redesign.md   # concept, implementation plan, evidence
 ├── test/test_suite.gd
 └── tools/                       # finite verification adapters, native capture, bounded font installation
 ```
@@ -349,7 +350,7 @@ Clearing a stage awards `stage_clear`: 500. `RunScoreService.authored_collectibl
 ## Minimalist presentation
 `ScreenFactory` owns graphite panels, hairlines, cool blue focus states, neutral secondary buttons and the light primary action. Real Godot text renders every label. The HUD uses separate status and wrapping effect rows; power-up timers remain visible in portrait. World scaling fits below the HUD and leaves touch-control space. Actor sprites remain centered on their grid positions without vertical bobbing.
 
-The reference uses eleven separately generated original raster assets. Prompt/source/runtime mappings are recorded in `assets/template/provenance/IMAGEGEN.md`. Original generated outputs remain in generation history; shipped media is restored from permanent CDN mappings. No old picnic art or default sound assets are part of the current payload. Connected maze walls and path-facing borders remain code-native.
+Template raster media is restored from permanent CDN mappings. No old picnic art or default sound assets are part of the current payload. Connected maze walls and path-facing borders remain code-native.
 
 The effects director owns twelve recycled burst emitters and one ambient emitter. Reduced Motion disables ambient movement and uses restrained feedback. The default particle density is 0.4 and studio filter strength is 0.18. There is no continuous player trail.
 

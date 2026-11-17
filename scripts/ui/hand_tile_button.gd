@@ -6,13 +6,16 @@ var main_controller: Node
 
 
 func _get_drag_data(_at_position: Vector2) -> Variant:
-	if tile_id < 0 or not is_instance_valid(main_controller):
+	if tile_id < 0 or not is_instance_valid(main_controller) or not main_controller.call("can_move_tile", tile_id):
 		return null
 	var preview := Button.new()
 	preview.text = text
 	preview.custom_minimum_size = custom_minimum_size
 	preview.add_theme_font_size_override("font_size", get_theme_font_size("font_size"))
 	preview.add_theme_color_override("font_color", get_theme_color("font_color"))
+	for child: Node in get_children():
+		if child is TextureRect or child is Label:
+			preview.add_child(child.duplicate())
 	set_drag_preview(preview)
 	return {"source_tile_id": tile_id, "hand_owner_id": hand_owner_id}
 
@@ -20,7 +23,7 @@ func _get_drag_data(_at_position: Vector2) -> Variant:
 func _can_drop_data(_at_position: Vector2, data: Variant) -> bool:
 	if not data is Dictionary or not is_instance_valid(main_controller):
 		return false
-	return int(data.get("hand_owner_id", -1)) == main_controller.get_instance_id() and int(data.get("source_tile_id", -1)) != tile_id
+	return int(data.get("hand_owner_id", -1)) == main_controller.get_instance_id() and int(data.get("source_tile_id", -1)) != tile_id and main_controller.call("can_move_tile", int(data.get("source_tile_id", -1))) and main_controller.call("can_move_tile", tile_id)
 
 
 func _drop_data(at_position: Vector2, data: Variant) -> void:
